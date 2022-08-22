@@ -1,33 +1,24 @@
 import React from "react";
+import { CurrencyOption } from "./CurrencyOption";
 
-export const CurrencyField = ({
-  value,
-  setValue,
-  setCurrency,
-  currency,
-  handlerInput,
-  isConverting,
-}) => {
-  const currenciesForConvert = ["USD", "UAH", "EUR"];
-  const currencyOptions = currenciesForConvert.map((o, idx) => (
-    <option key={idx} value={o}>
-      {o}
-    </option>
-  ));
-  const onInputHandler = (e) => {
-    const amount = e.target.value;
-    setValue(amount);
+export const CurrencyField = ({ value, setCurrency, currency, handlerInput }) => {
+  const onInputHandler = (amount) => {
     handlerInput(amount);
   };
+
+  const handleSelect = (selectCurrency) => {
+    setCurrency(selectCurrency);
+  };
+
   return (
     <div className="flex items-center border-b border-slate-600 py-2 mt-5">
       <div className="inline-block relative max-w-max">
         <select
           value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
+          onChange={(e) => handleSelect(e.target.value)}
           className="block appearance-none w-max bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
         >
-          {currencyOptions}
+          <CurrencyOption />
         </select>
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
           <svg
@@ -44,12 +35,10 @@ export const CurrencyField = ({
         placeholder="Enter value"
         type="number"
         value={value}
-        defaultValue={value}
         onInput={(e) => {
-          onInputHandler(e);
+          onInputHandler(e.target.value);
         }}
       />
-      {isConverting && <p>Converting...</p>}
     </div>
   );
 };
